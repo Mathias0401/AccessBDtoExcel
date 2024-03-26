@@ -1,4 +1,4 @@
-import pyodbc, xlsxwriter,openpyxl, time, os, traceback
+import pyodbc, xlsxwriter,openpyxl, time, os, traceback, tabulate
 import pandas as pd
 from openpyxl.utils import get_column_letter
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -32,10 +32,12 @@ except:
     input("Enter pa seguir...")
 
 try:
-    maxRow = 0;
+    fecha = pd.Timestamp(day=19,month=3,year=2024,hour=00,minute=00,second=00)
+    maxRow = 0
     for r in dataframe_to_rows(dataf, header=True, index=False):
-        maxRow+=1
-        worksheet.append(r)
+        if(r[0] == fecha or maxRow == 0):
+            maxRow+=1
+            worksheet.append(r)
     tab = Table(displayName="Table1", ref=f"A1:R{maxRow}")
     # Añado un estilo por defecto con filas a rayas
     style = TableStyleInfo(name="TableStyleMedium1", showFirstColumn=False,
@@ -49,4 +51,4 @@ except:
 
 workbook.save('Stock.xlsx')
 
-#input("Enter pa seguir...")
+input("Enter pa seguir...")
